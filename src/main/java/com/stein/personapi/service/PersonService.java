@@ -8,6 +8,9 @@ import com.stein.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonService {
 
@@ -24,5 +27,11 @@ public class PersonService {
         Person personToSave = PersonMapper.INSTANCE.toModel(personDTO);
         Person savedPerson = personRepository.save(personToSave);
         return MessageResponseDTO.builder().message("Person created with id" + savedPerson.getId()).build();
+    }
+
+    public List<PersonDTO> ListAll() {
+        List<Person> allPeople = personRepository.findAll();
+
+        return allPeople.stream().map(PersonMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 }
